@@ -646,6 +646,102 @@ class xtGraphics extends Panel implements Runnable {
         // }
     }
 
+    public void menusettings(Control control) {
+
+        app.repaint();
+
+        if (flipo == 0) {
+            bgmy[0] = 0;
+            bgmy[1] = GameFacts.screenHeight;
+            app.setCursor(new Cursor(0));
+        }
+
+        int i = 0;
+        do {
+            rd.drawImage(bgmain, 0, bgmy[i], null);
+            bgmy[i] -= 2;
+            if (bgmy[i] <= -GameFacts.screenHeight) {
+                bgmy[i] = GameFacts.screenHeight;
+            }
+        } while (++i < 2);
+
+        rd.setFont(new Font("SansSerif", 1, 13));
+        FontHandler.fMetrics = rd.getFontMetrics();
+
+        drawcs(20, "Number of Players: " + GameFacts.numberOfPlayers, 255, 255, 255, 3);
+        drawcs(40, "Back", 255, 255, 255, 3);
+
+        if (control.up) {
+            opselect--;
+            if (opselect == -1) {
+                opselect = 1;
+            }
+            control.up = false;
+        }
+        if (control.down) {
+            opselect++;
+            if (opselect == 2) {
+                opselect = 0;
+            }
+            control.down = false;
+        }
+        if (opselect == 0) {
+            rd.setFont(new Font("SansSerif", 1, 13));
+            FontHandler.fMetrics = rd.getFontMetrics();
+            if (aflk) {
+                drawcs(20, "Number of Players: " + GameFacts.numberOfPlayers, 255, 0, 0, 3);
+                rd.setColor(new Color(200, 255, 0));
+                aflk = false;
+            } else {
+                drawcs(20, "Number of Players: " + GameFacts.numberOfPlayers, 0, 0, 0, 3);
+                rd.setColor(new Color(255, 128, 0));
+                aflk = true;
+            }
+        }
+        if (opselect == 1) {
+            if (shaded) {
+                rd.setColor(new Color(140, 70, 0));
+                rd.fillRect(234, 275, 196, 22);
+                aflk = false;
+            }
+            rd.setFont(new Font("SansSerif", 1, 13));
+            FontHandler.fMetrics = rd.getFontMetrics();
+            if (aflk) {
+                drawcs(40, "Back", 255, 0, 0, 3);
+                aflk = false;
+            } else {
+                drawcs(40, "Back", 0, 0, 0, 3);
+                aflk = true;
+            }
+        }
+
+        if (control.enter || control.handb) {
+            if (opselect == 1) {
+                fase = oldfase;
+            }
+            control.enter = false;
+            control.handb = false;
+        }
+        if (control.left) {
+            if (opselect == 0) {
+                GameFacts.numberOfPlayers--;
+                if (GameFacts.numberOfPlayers == 0) {
+                    GameFacts.numberOfPlayers = 51;
+                }
+            }
+            control.left = false;
+        }
+        if (control.right) {
+            if (opselect == 0) {
+                GameFacts.numberOfPlayers++;
+                if (GameFacts.numberOfPlayers == 52) {
+                    GameFacts.numberOfPlayers = 1;
+                }
+            }
+            control.right = false;
+        }
+    }
+
     public void inst(Control control) {
         if (flipo == 0) {
             flipo = 1;
@@ -3580,19 +3676,19 @@ class xtGraphics extends Panel implements Runnable {
         app = applet;
         rd = graphics2d;
         MediaTracker mediatracker = new MediaTracker(app);
-        hello = Toolkit.getDefaultToolkit().getImage(xtGraphics.class.getResource("hello.gif"));
+        hello = Toolkit.getDefaultToolkit().getImage(xtGraphics.class.getResource("data/misc/hello.gif"));
         mediatracker.addImage(hello, 0);
         try {
             mediatracker.waitForID(0);
         } catch (Exception _ex) {
         }
-        sign = Toolkit.getDefaultToolkit().getImage(xtGraphics.class.getResource("sign.gif"));
+        sign = Toolkit.getDefaultToolkit().getImage(xtGraphics.class.getResource("data/misc/sign.gif"));
         mediatracker.addImage(sign, 0);
         try {
             mediatracker.waitForID(0);
         } catch (Exception _ex) {
         }
-        loadbar = Toolkit.getDefaultToolkit().getImage(xtGraphics.class.getResource("loadbar.gif"));
+        loadbar = Toolkit.getDefaultToolkit().getImage(xtGraphics.class.getResource("data/misc/loadbar.gif"));
         mediatracker.addImage(loadbar, 0);
         try {
             mediatracker.waitForID(0);
@@ -3603,6 +3699,11 @@ class xtGraphics extends Panel implements Runnable {
     }
 
     public void maini(Control control) {
+
+        // might redo the entire menu its horrible
+
+        int menuItems = 4;
+
         if (flipo == 0) {
             bgmy[0] = 0;
             bgmy[1] = GameFacts.screenHeight;
@@ -3678,13 +3779,13 @@ class xtGraphics extends Panel implements Runnable {
         if (control.up) {
             opselect--;
             if (opselect == -1) {
-                opselect = 2;
+                opselect = menuItems - 1;
             }
             control.up = false;
         }
         if (control.down) {
             opselect++;
-            if (opselect == 3) {
+            if (opselect == menuItems + 1) {
                 opselect = 0;
             }
             control.down = false;
@@ -3759,6 +3860,10 @@ class xtGraphics extends Panel implements Runnable {
             }
             if (opselect == 2) {
                 fase = 8;
+            }
+            if (opselect == 3) {
+                oldfase = 10;
+                fase = 9000;
             }
             flipo = 0;
             control.enter = false;

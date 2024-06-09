@@ -946,6 +946,14 @@ public class GameSparker extends Applet implements Runnable {
                 if (mouses == 1)
                     mouses = 2;
             }
+            if (xtgraphics.fase == 9000) {          // settings menu
+                xtgraphics.menusettings(u[0]);;
+                xtgraphics.ctachm(xm, ym, mouses, u[0]);
+                if (mouses == 2)
+                    mouses = 0;
+                if (mouses == 1)
+                    mouses = 2;
+            }
             if (xtgraphics.fase == -205) {
                 xtgraphics.fase = -5;
             }
