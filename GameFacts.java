@@ -10,7 +10,7 @@ public class GameFacts
 
      public static final int numberOfCars = 16;
 
-     public static int numberOfPlayers = 7;
+     public static int numberOfPlayers = 1;
 
      public static final int screenWidth = 1280; //dont touch this if you don't know what you're doing
 

@@ -255,7 +255,10 @@ class xtGraphics extends Panel implements Runnable {
     private int flangados;
     private float blackn;
     private float blacknados;
+
     public int antiCookieSpam;
+
+    static int practicemode = 0;
     /**
      * Filter images
      *
@@ -555,6 +558,11 @@ class xtGraphics extends Panel implements Runnable {
         if (!setnumber) {
             //GameFacts.numberOfPlayers = 7;
             setnumber = true;
+            if (GameFacts.numberOfPlayers == 1) {
+                practicemode = 1;
+            } else {
+                practicemode = 0;
+            }
         } else {
             fase = 2;
         }
@@ -2162,7 +2170,7 @@ class xtGraphics extends Panel implements Runnable {
         }
         if (fase != -2) {
             holdit = false;
-            if (checkpoints.wasted == GameFacts.numberOfPlayers - 1) {
+            if (checkpoints.wasted == GameFacts.numberOfPlayers - 1 && practicemode == 0) {
                 if (Medium.flex != 2) {
                     rd.setColor(new Color(Medium.csky[0], Medium.csky[1], Medium.csky[2]));
                     rd.fillRect(226, 70, youwastedem.getWidth(ob), youwastedem.getHeight(ob));
@@ -2171,10 +2179,10 @@ class xtGraphics extends Panel implements Runnable {
                 }
                 rd.drawImage(youwastedem, 226, 70, null);
                 if (aflk) {
-                    drawcs(120, "You Won, all cars have been wasted!", 0, 0, 0, 0);
+                    drawcs(120, "You won, all cars have been wasted!", 0, 0, 0, 0);
                     aflk = false;
                 } else {
-                    drawcs(120, "You Won, all cars have been wasted!", 0, 128, 255, 0);
+                    drawcs(120, "You won, all cars have been wasted!", 0, 128, 255, 0);
                     aflk = true;
                 }
                 drawcs(350, "Press  [ Enter ]  to continue", 0, 0, 0, 0);
@@ -2957,6 +2965,10 @@ class xtGraphics extends Panel implements Runnable {
     private void sortcars(final int i) {
         if (i != 0) {
             int lastcar = GameFacts.numberOfPlayers;
+
+            if (GameFacts.numberOfPlayers == 1) {
+                return;     // if there's only 1 car (the player), don't sort anything
+            }
 
             int maxId = GameFacts.numberOfPlayers + (i + 1) / 2;
             if (maxId > GameFacts.numberOfCars - 1) {
@@ -4058,6 +4070,18 @@ class xtGraphics extends Panel implements Runnable {
 
                 if (name.equals("tick.wav")) {
                     sm.add("tick", new SoundClipThreaded(sound));
+                }
+
+                if (name.equals("tliu.wav")) {
+                    sm.add("tliu", new SoundClipThreaded(sound));
+                }
+
+                if (name.equals("woosh.wav")) {
+                    sm.add("woosh", new SoundClipThreaded(sound));
+                }
+
+                if (name.equals("cosmic.wav")) {
+                    sm.add("cosmic", new SoundClipThreaded(sound));
                 }
 
                 this.dnload += 5;

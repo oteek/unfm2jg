@@ -37,7 +37,7 @@ public class GameSparker extends Applet implements Runnable {
      * uh help
      */
     public static final String WORKING_DIRECTORY = ".";
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     private static final long serialVersionUID = -34048182014310663L;
 
@@ -61,7 +61,7 @@ public class GameSparker extends Applet implements Runnable {
      */
     private static final boolean splashScreenState = true;
 
-    private static final String stageDir = "stages/";
+    private static final String stageDir = "data/stages/";
 
     /**
      * Set directory for temporary creation of cookies (directory is deleted after writing is complete)
