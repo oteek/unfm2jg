@@ -27,7 +27,7 @@ class RunApp extends Panel {
                     16, 32, 48
             };
             for (int res : resols) {
-                icons.add(Toolkit.getDefaultToolkit().createImage("data/ico_" + res + ".png"));
+                icons.add(Toolkit.getDefaultToolkit().createImage("data/misc/ico_" + res + ".png"));
             }
         }
         return icons;

@@ -257,7 +257,7 @@ class xtGraphics extends Panel implements Runnable {
     private int flangados;
     private float blackn;
     private float blacknados;
-
+    public int antiCookieSpam;
     /**
      * Filter images
      *
@@ -600,6 +600,7 @@ class xtGraphics extends Panel implements Runnable {
         drawcs(GameFacts.screenWidth - 5, "You can also use Keyboard Arrows and Enter to navigate.", 82, 90, 0, 3);
         lockcnt--;
         if (lockcnt == 0 || control.enter || control.handb || control.left) {
+            sm.play("tick");
             control.left = false;
             control.handb = false;
             control.enter = false;
@@ -611,20 +612,25 @@ class xtGraphics extends Panel implements Runnable {
         /*
          * 
          * looks better without idc fight me
-        trackbg(true);
+         * 
+        */
+        trackbg(false);
         rd.setColor(new Color(177, 177, 177));
         rd.fillRoundRect(200, 150, 270, 52, 20, 40);
         rd.setColor(new Color(120, 120, 120));
         rd.drawRoundRect(200, 150, 270, 52, 20, 40);
+
         rd.setFont(new Font("SansSerif", 1, 13));
         FontHandler.fMetrics = rd.getFontMetrics();
         drawcs(180, "Loading Stage " + i + ", please wait...", 0, 0, 0, 3);
         rd.drawImage(select, 388, 45, null);
-        rd.drawImage(br, 0, 0, null);
+
+        //rd.drawImage(br, 0, 0, null);
         rd.setFont(new Font("SansSerif", 1, 11));
         FontHandler.fMetrics = rd.getFontMetrics();
-        drawcs(511, "You can also use Keyboard Arrows and Enter to navigate.", 82, 90, 0, 3);
-        app.repaint();*/
+        drawcs(GameFacts.screenHeight - 5, "You can also use Keyboard Arrows and Enter to navigate.", 82, 90, 0, 3);
+        
+        //app.repaint();
 
 
         // if (lastload != -22) {
@@ -1343,6 +1349,7 @@ class xtGraphics extends Panel implements Runnable {
                     pwastd = false;
                 }
                 if (cntwis == 7 && !mutes) {
+                    sm.stop("wasted");
                     sm.play("firewasted");
                 }
             }
@@ -1635,6 +1642,7 @@ class xtGraphics extends Panel implements Runnable {
     public void loadmusic(int i, int j) {
         hipnoload(i, false);
         app.setCursor(new Cursor(3));
+        app.repaint();
 
         boolean flag = false;
 
@@ -2000,7 +2008,7 @@ class xtGraphics extends Panel implements Runnable {
             if (opselect == 1) {
                 if (record.caught >= 300) {
                     if (loadedt) {
-                        strack.setPaused(true);
+                        strack.setPaused(false);
                     }
                     fase = -1;
                 } else {
@@ -2250,13 +2258,13 @@ class xtGraphics extends Panel implements Runnable {
                     rd.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                     arrow(madness[0].point, madness[0].missedcp, checkpoints, conto, arrace);
 
-                    int num_cars = 7;
+                    int num_cars = GameFacts.numberOfPlayers;
                     for (int array_one = 0; array_one < num_cars; array_one++) {
                         boolean flag_status = false;
                         for (int array_two = 0; array_two < num_cars; array_two++) {
                             if (checkpoints.pos[array_two] == array_one && checkpoints.dested[array_two] == 0 && !flag_status) {
                                 int y_value = 30; // use to move status up or down
-                                int x_value = GameFacts.screenWidth - 500;  // use to move status left or right
+                                int x_value = GameFacts.screenWidth - 100;  // use to move status left or right
 
                                 rd.setColor(new Color(0, 0, 100));
                                 if (array_one == 0)
@@ -3123,7 +3131,10 @@ class xtGraphics extends Panel implements Runnable {
         // rd.setFont(new Font("Adventure", 1, 30));
         // drawcs(40, "S E L E C T   S T A G E", 255, 128, 0, 3);
         
-        rd.drawImage(select, GameFacts.screenWidth/2 - 60, 35, null);
+        rd.setColor(new Color(20, 20, 20,100));
+        rd.fillRoundRect(GameFacts.screenWidth/2 - 70, 20, 145, 27,23,30);
+        rd.drawImage(select, GameFacts.screenWidth/2 - 60, 25, null);
+
         if (checkpoints.stage != 1) {
             rd.drawImage(back[pback], 50, 110, null);
         }
@@ -3133,7 +3144,7 @@ class xtGraphics extends Panel implements Runnable {
 
         //rectangle     borrowed from g6
         rd.setColor(new Color(20, 20, 20,100));
-        rd.fillRoundRect(GameFacts.screenWidth/2 - 125, 60, 250, 50,23,30);
+        rd.fillRoundRect(GameFacts.screenWidth/2 - 175, 60, 350, 50,23,30);
 
         rd.setFont(new Font("SansSerif", 1, 13));
         FontHandler.fMetrics = rd.getFontMetrics();
@@ -3149,6 +3160,7 @@ class xtGraphics extends Panel implements Runnable {
         FontHandler.fMetrics = rd.getFontMetrics();
         drawcs(GameFacts.screenHeight - 5, "You can also use Keyboard Arrows and Enter to navigate.", 82, 90, 0, 3);
         if (control.handb || control.enter) {
+            sm.play("tick");
             asay = "Stage " + checkpoints.stage + ":  " + checkpoints.name + " ";
             dudo = 150;
             Medium.trk = false;
@@ -3160,6 +3172,7 @@ class xtGraphics extends Panel implements Runnable {
             intertrack.unload();
         }
         if (control.right && checkpoints.stage < GameFacts.numberOfStages) {
+            sm.play("tick");
             if (checkpoints.stage != unlocked) {
                 checkpoints.stage++;
                 fase = 58;
@@ -3171,6 +3184,7 @@ class xtGraphics extends Panel implements Runnable {
             }
         }
         if (control.left && checkpoints.stage > 1) {
+            sm.play("tick");
             checkpoints.stage--;
             fase = 58;
             control.left = false;
@@ -3268,6 +3282,7 @@ class xtGraphics extends Panel implements Runnable {
         winner = false;
         setnumber = false;
         wasted = 0;
+        antiCookieSpam = 0;
         int j = 0;
         do {
             dested[j] = 0;
@@ -3426,10 +3441,10 @@ class xtGraphics extends Panel implements Runnable {
         rd.drawImage(sign, 412, 10, this);
         rd.drawImage(hello, 175, 80, this);
         rd.setColor(new Color(198, 214, 255));
-        rd.fillRoundRect(300, 315, 300, 80, 30, 70);
+        rd.fillRoundRect(GameFacts.screenWidth/2 - 150, 315, 300, 80, 30, 70);
         rd.setColor(new Color(128, 167, 255));
-        rd.drawRoundRect(300, 315, 300, 80, 30, 70);
-        rd.drawImage(loadbar, 331, 340, this);
+        rd.drawRoundRect(GameFacts.screenWidth/2 - 150, 315, 300, 80, 30, 70);
+        rd.drawImage(loadbar, GameFacts.screenWidth/2 - 166, 340, this);
         rd.setFont(new Font("SansSerif", 1, 11));
         FontHandler.fMetrics = rd.getFontMetrics();
         drawcs(333, "Loading game, please wait.", 0, 0, 0, 3);
@@ -3443,7 +3458,7 @@ class xtGraphics extends Panel implements Runnable {
         drawcs(385, "" + (int) (((26F + (shload / kbload) * 200F) / 226F) * 100F) + " % loaded    |    "
                 + (kbload - (int) shload) + " KB remaining", 32, 64, 128, 3);
         rd.setColor(new Color(32, 64, 128));
-        rd.fillRect(337, 346, 26 + (int) ((shload / kbload) * 200F), 10);
+        rd.fillRect(GameFacts.screenWidth/2 - 169, 346, 26 + (int) ((shload / kbload) * 200F), 10);
     }
 
     public xtGraphics(Graphics2D graphics2d, Applet applet) {
@@ -3551,6 +3566,7 @@ class xtGraphics extends Panel implements Runnable {
         flangados = 0;
         blackn = 0.0F;
         blacknados = 0.0F;
+        antiCookieSpam = 0;
         app = applet;
         rd = graphics2d;
         MediaTracker mediatracker = new MediaTracker(app);
@@ -3820,6 +3836,7 @@ class xtGraphics extends Panel implements Runnable {
     public void musicomp(int i, Control control) {
         hipnoload(i, true);
         if (control.handb || control.enter) {
+            sm.play("tick");
             System.gc();
             fase = 0;
             control.handb = false;
@@ -4042,6 +4059,10 @@ class xtGraphics extends Panel implements Runnable {
                     sm.add("firewasted", new SoundClipUnthreaded(sound));
                 }
 
+                if (name.equals("tick.wav")) {
+                    sm.add("tick", new SoundClipThreaded(sound));
+                }
+
                 this.dnload += 5;
             }
             
@@ -4142,9 +4163,9 @@ class xtGraphics extends Panel implements Runnable {
 
     public void clicknow() {
         rd.setColor(new Color(198, 214, 255));
-        rd.fillRoundRect(300, 315, 300, 80, 30, 70);
+        rd.fillRoundRect(GameFacts.screenWidth/2 - 150, 315, 300, 80, 30, 70);
         rd.setColor(new Color(128, 167, 255));
-        rd.drawRoundRect(300, 315, 300, 80, 30, 70);
+        rd.drawRoundRect(GameFacts.screenWidth/2 - 150, 315, 300, 80, 30, 70);
         if (aflk) {
             drawcs(355, "Click here to Start", 0, 0, 0, 3);
             aflk = false;
@@ -4363,11 +4384,11 @@ class xtGraphics extends Panel implements Runnable {
         rd.drawImage(selectcar, GameFacts.screenWidth/2 - 75, 12, null);
         Medium.crs = true;
         Medium.x = -640;
-        Medium.y = -500;
-        Medium.z = -50;
+        Medium.y = -600;
+        Medium.z = 200;
         Medium.xz = 0;
         Medium.zy = 10;
-        Medium.ground = 470;
+        Medium.ground = 570;
         aconto[sc[0]].d(rd);
         if (flipo == 0) {
             rd.setFont(new Font("SansSerif", 1, 13));
@@ -4391,7 +4412,7 @@ class xtGraphics extends Panel implements Runnable {
             if (sc[0] != 0) {
                 rd.drawImage(back[pback], 30, 490, null);
             }
-            if (sc[0] != 15) {
+            if (sc[0] != GameFacts.numberOfCars - 1) {
                 rd.drawImage(next[pnext], 1190, 490, null);
             }
             if ((sc[0] - 7) * 2 >= unlocked) {
@@ -4517,8 +4538,12 @@ class xtGraphics extends Panel implements Runnable {
                 if (flipo == 10) {
                     if (nextc) {
                         sc[0]++;
+                        if(sc[0] == GameFacts.numberOfCars)
+                            sc[0] = 0;
                     } else {
                         sc[0]--;
+                        if(sc[0] == -1)
+                            sc[0] = GameFacts.numberOfCars - 1;
                     }
                     aconto[sc[0]].z = 950;
                     aconto[sc[0]].y = -34 - aconto[sc[0]].grat - 1100;
@@ -4533,20 +4558,27 @@ class xtGraphics extends Panel implements Runnable {
         FontHandler.fMetrics = rd.getFontMetrics();
         drawcs(GameFacts.screenHeight - 5, "You can also use Keyboard Arrows and Enter to navigate.", 82, 90, 0, 3);
         if (control.right) {
+            sm.play("tick");
             control.right = false;
-            sc[0]++;
-            if(sc[0] == GameFacts.numberOfCars)
-                sc[0] = 0;
-
+            if (flatrstart > 1) {
+                flatrstart = 0;
+            }
+            nextc = true;
+            flipo = 10;
+            //sc[0]++;
         }
         if (control.left) {
+            sm.play("tick");
             control.left = false;
-            sc[0]--;
-            if(sc[0] == -1)
-                sc[0] = GameFacts.numberOfCars - 1;
-
+            if (flatrstart > 1) {
+                flatrstart = 0;
+            }
+            nextc = false;
+            flipo = 10;
+            //sc[0]--;
         }
         if (control.handb || control.enter) {
+            sm.play("tick");
             if (flipo == 0 && (sc[0] - 7) * 2 < unlocked) {
                 lastload = -11;
                 intercar.setPaused(true);

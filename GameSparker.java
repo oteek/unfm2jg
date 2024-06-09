@@ -947,15 +947,19 @@ public class GameSparker extends Applet implements Runnable {
                     mouses = 2;
             }
             if (xtgraphics.fase == -205) {
-                if (checkpoints.stage == xtgraphics.unlocked && xtgraphics.winner && xtgraphics.unlocked != GameFacts.numberOfStages)
-                    savecookie("unlocked", "" + xtgraphics.unlocked);
-                savecookie("gameprfact", "" + (int) f);
-                savecookie("usercar", "" + xtgraphics.sc[0]);
-
                 xtgraphics.fase = -5;
             }
             if (xtgraphics.fase == -5) {
                 xtgraphics.finish(checkpoints, aconto, u[0]);
+
+                if (xtgraphics.antiCookieSpam != 5) {
+                    if (checkpoints.stage == xtgraphics.unlocked && xtgraphics.winner && xtgraphics.unlocked != GameFacts.numberOfStages)
+                        savecookie("unlocked", "" + xtgraphics.unlocked);
+                    savecookie("gameprfact", "" + (int) f);
+                    savecookie("usercar", "" + xtgraphics.sc[0]);
+                    xtgraphics.antiCookieSpam++;
+                }
+
                 xtgraphics.ctachm(xm, ym, mouses, u[0]);
                 if (checkpoints.stage == GameFacts.numberOfStages && xtgraphics.winner)
                     catchlink(1);
@@ -1200,7 +1204,7 @@ public class GameSparker extends Applet implements Runnable {
                     if (view == 0) {
                         Medium.follow(aconto1[0], amadness[0].cxz, u[0].lookback);
                         xtgraphics.stat(amadness, checkpoints, u[0], aconto1, true);
-                        initMoto(amadness, 2, 25);
+                        initMoto(amadness, 2, 5);
                     }
                     if (view == 1) {
                         Medium.around(aconto1[0], false);
