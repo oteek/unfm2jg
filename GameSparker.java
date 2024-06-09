@@ -18,9 +18,27 @@ import java.util.zip.ZipOutputStream;
  * @author Kaffeinated, Omar Waly
  */
 public class GameSparker extends Applet implements Runnable {
-    /**
+        /**
      *
      */
+
+    /**
+     * get os name / type
+     */
+    public static final String OPERATING_SYSTEM = System.getProperty("os.name").toLowerCase();
+    public static final boolean IS_UNIX = OPERATING_SYSTEM.indexOf("nix") == 0 || OPERATING_SYSTEM.indexOf("nux") == 0;
+    public static final boolean IS_WINDOWS = OPERATING_SYSTEM.indexOf("win") == 0;
+    public static final boolean IS_MAC = OPERATING_SYSTEM.indexOf("mac") == 0;
+    /**
+     * get os bit
+     */
+    public static final String IS_64_BIT = System.getProperty("sun.arch.data.model").equals("64") ? "64" : "32";
+    /**
+     * uh help
+     */
+    public static final String WORKING_DIRECTORY = ".";
+    public static final boolean DEBUG = false;
+
     private static final long serialVersionUID = -34048182014310663L;
 
     private static final String[] carModels = {
@@ -267,6 +285,22 @@ public class GameSparker extends Applet implements Runnable {
     }
 
     public GameSparker() {
+
+        // INFO
+        System.out.println(IS_64_BIT + "BIT " + OPERATING_SYSTEM.toUpperCase());
+
+        //DS-patch: Dynamic libs path - BEGIN
+        String dllPath = "lib/dlls/";
+        if (IS_MAC) {
+            dllPath += "mac";
+        } else {
+            dllPath += (IS_WINDOWS ? "win" : "linux") + IS_64_BIT;
+        }
+        System.setProperty("org.lwjgl.librarypath", dllPath);
+        //DS-patch - END
+
+        BASSLoader.initializeBASS();
+
         u = new Control[51];
         mouses = 0;
         xm = 0;
@@ -817,7 +851,7 @@ public class GameSparker extends Applet implements Runnable {
             xtgraphics.opselect = 0;
         }
         l = readcookie("usercar");
-        if (l >= 0 && l <= 15)
+        if (l >= 0 && l <= GameFacts.numberOfCars - 1)
             xtgraphics.sc[0] = l;
         l = readcookie("gameprfact");
         if (l != -1) {
@@ -912,7 +946,7 @@ public class GameSparker extends Applet implements Runnable {
                 if (mouses == 1)
                     mouses = 2;
             }
-            if(xtgraphics.fase == -205) {
+            if (xtgraphics.fase == -205) {
                 if (checkpoints.stage == xtgraphics.unlocked && xtgraphics.winner && xtgraphics.unlocked != GameFacts.numberOfStages)
                     savecookie("unlocked", "" + xtgraphics.unlocked);
                 savecookie("gameprfact", "" + (int) f);
@@ -974,7 +1008,7 @@ public class GameSparker extends Applet implements Runnable {
                     mouses = 2;
             }
             if(xtgraphics.fase == 58) {
-                xtgraphics.carspergame();
+                xtgraphics.carspergame(checkpoints);
             }
             if (xtgraphics.fase == 2) {
                 xtgraphics.loadingstage(checkpoints.stage);
@@ -1073,14 +1107,7 @@ public class GameSparker extends Applet implements Runnable {
                 } else {
                     u[0].enter = false;
                     u[0].handb = false;
-                    if(xtgraphics.loadedt[checkpoints.stage - 1]) {
-                        xtgraphics.tracks[checkpoints.stage - 1].play();
-                        /*if (xtgraphics.isMidi[checkpoints.stage - 1]) {
-                            xtgraphics.mtracks[checkpoints.stage - 1].play();
-                        } else {
-                            xtgraphics.stracks[checkpoints.stage - 1].play();
-                        }*/
-                    }
+
                     setCursor(new Cursor(0));
                     xtgraphics.fase = 6;
                 }

@@ -7,3 +7,7 @@
 .idea
 /logs/
 /data/models/
+/com*
+/sun*
+.project
+.classpath

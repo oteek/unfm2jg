@@ -34,7 +34,7 @@ class RunApp extends Panel {
     }
 
     public static void main(String[] strings) {
-        System.runFinalizersOnExit(true);
+        //System.runFinalizersOnExit(true);
         HLogger.info("UNFM2 Console"); // Change this to the message of your preference
         try {
             javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
@@ -61,7 +61,7 @@ class RunApp extends Panel {
         });
         applet.setPreferredSize(new Dimension(GameFacts.screenWidth, GameFacts.screenHeight));// The resolution of your game goes here
         frame.add("Center", applet);
-        frame.setResizable(false);// If you plan to make you game support changes in resolution, you can comment out this line.
+        frame.setResizable(true);// If you plan to make you game support changes in resolution, you can comment out this line.
         frame.pack();
         frame.setMinimumSize(frame.getSize());
         frame.setLocationRelativeTo(null);

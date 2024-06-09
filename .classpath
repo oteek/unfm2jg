@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-14"/>
+	<classpathentry kind="lib" path="e:/NFM2Codebase/unfm2jg/lib/logmaster-rev5.jar"/>
+	<classpathentry kind="lib" path="e:/NFM2Codebase/unfm2jg/lib/dragshotMod.jar"/>
+	<classpathentry kind="lib" path="e:/NFM2Codebase/unfm2jg/lib/easyogg.jar"/>
+	<classpathentry kind="lib" path="e:/NFM2Codebase/unfm2jg/lib/jasypt-1.9.2.jar"/>
+	<classpathentry kind="lib" path="e:/NFM2Codebase/unfm2jg/lib/jl1.0.1.jar"/>
+	<classpathentry kind="lib" path="e:/NFM2Codebase/unfm2jg/lib/jogg-0.0.7.jar"/>
+	<classpathentry kind="lib" path="e:/NFM2Codebase/unfm2jg/lib/jorbis-0.0.15.jar"/>
+	<classpathentry kind="lib" path="e:/NFM2Codebase/unfm2jg/lib/NativeBass.jar"/>
+	<classpathentry kind="lib" path="e:/NFM2Codebase/unfm2jg/lib/NativeBass-Examples.jar"/>
+	<classpathentry kind="lib" path="e:/NFM2Codebase/unfm2jg/lib/startup2.jar"/>
 	<classpathentry kind="src" path=""/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/logmaster-rev5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
