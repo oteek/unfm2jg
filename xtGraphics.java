@@ -1749,8 +1749,8 @@ class xtGraphics extends Panel implements Runnable {
         boolean flag = false;
 
 
-        if (i == unlocked && (i == 1 || i == 2 || i == 3 || i == 4 ||i == 5|| i == 7 || i == 8 || i == 9 || i == 10 || i == 12
-                || i == 13 || i == 16)) {
+        if (i == 1 || i == 2 || i == 3 || i == 4 ||i == 5|| i == 7 || i == 8 || i == 9 || i == 10 || i == 12
+                || i == 13 || i == 16) {
             flag = true;
         }
         if (flag) {
@@ -4498,10 +4498,10 @@ class xtGraphics extends Panel implements Runnable {
     public void carselect(Control control, ContO aconto[], Madness madness) {
         if (flatrstart == 6) {
             rd.drawImage(carsbg, 0, 0, null);
-        } else if (flatrstart <= 1) {
-            drawSmokeCarsbg();
+        // } else if (flatrstart <= 1) {
+        //     drawSmokeCarsbg();
         } else {
-            rd.setColor(new Color(255, 255, 255));
+            rd.setColor(new Color(255, 255, 255, 50));
             rd.fillRect(0, 0, GameFacts.screenWidth, GameFacts.screenHeight);//change this to your res
             carsbginflex();
             flatrstart = 6;

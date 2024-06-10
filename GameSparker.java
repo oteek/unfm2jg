@@ -59,7 +59,7 @@ public class GameSparker extends Applet implements Runnable {
     /**
      * false to disable splash
      */
-    private static final boolean splashScreenState = true;
+    private static final boolean splashScreenState = false;
 
     private static final String stageDir = "data/stages/";
 
