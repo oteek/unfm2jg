@@ -172,7 +172,7 @@ class xtGraphics extends Panel implements Runnable {
     private int wasted;
     private int laps;
     private final int[] dested;
-    private final String[] names = {
+    public final String[] names = {
             "Tornado Shark", "Formula 7", "Wow Caninaro", "La Vite Crab", "Nimi", "MAX Revenge", "Lead Oxide",
             "Kool Kat", "Drifter X", "Sword of Justice", "High Rider", "EL KING", "Mighty Eight", "M A S H E E N",
             "Radical One", "DR Monstaa"
@@ -259,6 +259,13 @@ class xtGraphics extends Panel implements Runnable {
     public int antiCookieSpam;
 
     static int practicemode = 0;
+
+    private int dev_up = 0;
+    private int dev_down = 0;
+    private int dev_left = 0;
+    private int dev_right = 0;
+    public boolean devtriggered = false;
+
     /**
      * Filter images
      *
@@ -3698,11 +3705,52 @@ class xtGraphics extends Panel implements Runnable {
         loadedt = false;
     }
 
-    public void maini(Control control) {
+    public void maini(Control control, CheckPoints checkpoints, Madness madness[]) {
 
         // might redo the entire menu its horrible
 
         int menuItems = 4;
+
+        if (GameSparker.DEBUG) {
+            if (control.up) {
+                dev_up++;
+                HLogger.info(dev_up);
+            }
+            if (control.down) {
+                dev_down++;
+                HLogger.info(dev_down);
+            }
+            if (control.left) {
+                dev_left++;
+                HLogger.info(dev_left);
+            }
+            if (control.right) {
+                dev_right++;
+                HLogger.info(dev_right);
+            }
+
+            if (control.enter) {
+                if ((dev_up == 1 && dev_down == 7 && dev_left == 3 && dev_right == 8) && !devtriggered) {  //1738
+                    devtriggered = true;
+
+                    dev_up = 0;
+                    dev_down = 0;
+                    dev_left = 0;
+                    dev_right = 0;
+
+                    HLogger.info("Developer Console triggered");
+
+                    DevTool console = new DevTool(checkpoints, madness, this);
+                    console.showConsole();
+                } else {
+                    dev_up = 0;
+                    dev_down = 0;
+                    dev_left = 0;
+                    dev_right = 0;
+                    HLogger.info("???");
+                }
+            }
+        }
 
         if (flipo == 0) {
             bgmy[0] = 0;

@@ -94,6 +94,9 @@ public class GameSparker extends Applet implements Runnable {
     private int apx = 0;
     private int apy = 0;
 
+    public static String gameState = "None";
+    public static int gameStateID;
+
     /**
      * <a href="http://www.expandinghead.net/keycode.html">http://www.expandinghead.net/keycode.html</a>
      */
@@ -931,7 +934,7 @@ public class GameSparker extends Applet implements Runnable {
                     mouses = 2;
             }
             if (xtgraphics.fase == 10) {
-                xtgraphics.maini(u[0]);
+                xtgraphics.maini(u[0], checkpoints, amadness);
                 xtgraphics.ctachm(xm, ym, mouses, u[0]);
                 if (mouses == 2)
                     mouses = 0;
@@ -1231,7 +1234,10 @@ public class GameSparker extends Applet implements Runnable {
                         xtgraphics.blendude(offImage);
                     }
                 } else {
-                    Medium.around(aconto1[3], true);
+                    if (GameFacts.numberOfPlayers < 5)
+                        Medium.around(aconto1[0], true);
+                    else
+                        Medium.around(aconto1[3], true);
                     if (u[0].enter || u[0].handb) {
                         xtgraphics.starcnt = 38;
                         u[0].enter = false;
@@ -1568,7 +1574,7 @@ public class GameSparker extends Applet implements Runnable {
             }
             if (lostfcs && xtgraphics.fase != 176 && xtgraphics.fase != 111) {
                 if (xtgraphics.fase == 0)
-                    u[0].enter = true;
+                    u[0].enter = false;
                 else
                     xtgraphics.nofocus();
                 if (mouses == 1 || mouses == 2)
@@ -1649,6 +1655,30 @@ public class GameSparker extends Applet implements Runnable {
                 gamer.stop();
                 gamer = null;
             }
+
+            //if (xtgraphics.devtriggered) {
+                if (xtgraphics.fase == 0) {
+                    gameState = "In game\nStage " + checkpoints.stage + ": " + checkpoints.name + 
+                    "\nPlayers: " + GameFacts.numberOfPlayers;
+                    gameStateID = 0;
+                } else if (xtgraphics.fase == 1) {
+                    gameState =  "Selecting a Stage";
+                    gameStateID = 1;
+                } else if (xtgraphics.fase == 7) {
+                    gameState =  "Selecting a Car";
+                    gameStateID = 7;
+                } else if (xtgraphics.fase == 10) {
+                    gameState =  "In main menu";
+                    gameStateID = 10;
+                } else if (xtgraphics.fase == 11) {
+                    gameState =  "Reading game instructions";
+                    gameStateID = 11;
+                } else {
+                    gameState =  "Unknown State";
+                    gameStateID = -1738;
+                }
+            //}
+
             long l2 = Math.round(f1) - (l5 - l4);
             if (l2 < i)
                 l2 = i;

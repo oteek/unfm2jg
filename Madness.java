@@ -268,6 +268,15 @@ class Madness {
         stat = new Stat();
     }
 
+    public void devFixCar() {   // note: obviously that's not how it's done
+        this.squash = 0;
+        this.nbsq = 0;
+        this.hitmag = 0;
+        this.cntdest = 0;
+        this.dest = false;
+        this.newcar = true;
+    }
+
     private void regz(int i, float f, ContO conto) {
         f *= stat.dammult;
         if (Math.abs(f) > 100F) {
