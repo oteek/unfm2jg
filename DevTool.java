@@ -99,18 +99,18 @@ public class DevTool {
                         if (GameSparker.gameStateID > 1) {
                             if ((nplayers >= 1 && nplayers <= 51)) {
                                 GameFacts.numberOfPlayers = nplayers;
-                                print("Number of players set to " + nplayers + ".\n");
+                                print("Number of players set to " + nplayers + ".");
                             } else {
-                                print("Player number cannot be less than 1 or greater than 51.\n");
+                                print("Player number cannot be less than 1 or greater than 51.");
                             }
                         } else {
-                            print("This command only works in menus and before stage select.\n");
+                            print("This command only works in menus and before stage select.");
                         }
                     } catch (NumberFormatException e) {
                         print("Invalid number of players.\n");
                     }
                 } else {
-                    print("nplayers is " + GameFacts.numberOfPlayers + "\nUsage: nplayers <1-51>\n");
+                    print("nplayers is " + GameFacts.numberOfPlayers + "\nUsage: nplayers <1-51>");
                 }
                 break;
             case "fix":
@@ -121,13 +121,13 @@ public class DevTool {
                             madness[n].devFixCar();
                             print("Car " + n + " fixed");
                         } else {
-                            print("This command only works in game.\n");
+                            print("This command only works in game.");
                         }
                     } catch (NumberFormatException e) {
-                        print("Invalid argument.\n");
+                        print("Invalid argument.");
                     }
                 } else {
-                    print("Usage: fix <n>\n");
+                    print("Usage: fix <n>");
                 }
                 break;
             case "god":
@@ -143,7 +143,7 @@ public class DevTool {
                         godmode = false;
                     }
                 } else {
-                    print("This command only works in game.\n");
+                    print("This command only works in game.");
                 }
                 break;
             case "unlocked":
@@ -153,10 +153,10 @@ public class DevTool {
                         xt.unlocked = n;
                         print("xtGraphics.unlocked set to " + n);
                     } catch (NumberFormatException e) {
-                        print("Invalid argument.\n");
+                        print("Invalid argument.");
                     }
                 } else {
-                    print("xtGraphics.unlocked is " + xt.unlocked + "\nUsage: unlocked <n>\n");
+                    print("xtGraphics.unlocked is " + xt.unlocked + "\nUsage: unlocked <n>");
                 }
                 break;
             case "fase":
@@ -166,10 +166,10 @@ public class DevTool {
                         xt.fase = n;
                         print("Set xtGraphics.fase to " + n);
                     } catch (NumberFormatException e) {
-                        print("Invalid argument.\n");
+                        print("Invalid argument.");
                     }
                 } else {
-                    print("Usage: setfase <n>\n");
+                    print("Usage: setfase <n>");
                 }
                 break;
             case "spawn_ai":
@@ -178,39 +178,44 @@ public class DevTool {
                         int n = Integer.parseInt(args[0]);
                         if (GameSparker.gameStateID == 0) {
                             if ((n >= 0 && n <= GameFacts.numberOfCars - 1)) {
-                                ContO aconto[] = new ContO[GameSparker.ContosCount];
-                                ContO aconto1[] = new ContO[3000];
-                                int i1 = 0;
-                                for (int i = 0; i < GameFacts.numberOfPlayers; i++) {
-                                    i1 = i;
-                                }
-                                i1 += 1;
-                                //if (madness[i1].newcar) {
-                                    int j5 = aconto1[i1].xz;
-                                    int j6 = aconto1[i1].xy;
-                                    int l8 = aconto1[i1].zy;
-                                    aconto1[i1] = new ContO(aconto[n], aconto1[i1].x, aconto1[i1].y, aconto1[i1].z,
-                                            0);
-                                    aconto1[i1].xz = j5;
-                                    aconto1[i1].xy = j6;
-                                    aconto1[i1].zy = l8;
-                                    //madness[i1].newcar = false;
-                                //}
+                                // snip
                                 print("Spawned " + xt.names[xt.sc[n]]);
                             } else {
-                                print("Invalid car number.\n");
+                                print("Invalid car number.");
                             }
                         } else {
-                            print("This command only works in game.\n");
+                            print("This command only works in game.");
                         }
                     } catch (NumberFormatException e) {
-                        print("Invalid argument.\n");
+                        print("Invalid argument.");
                     }
+                }
+                break;
+            case "nfm":
+                if (args.length == 1) {
+                    try {
+                        int n = Integer.parseInt(args[0]);
+                        if (GameSparker.gameStateID == 10) {
+                            if ((n >= 1 && n <= 2)) {
+                                xt.nfmmode = n;
+                                print("Need For Madness " + n);
+                            } else {
+                                print("Prevented from creating a paradox.");
+                            }
+                        } else {
+                            print("This command only works in main menu.");
+                        }
+                    } catch (NumberFormatException e) {
+                        print("Invalid argument.");
+                    }
+                } else {
+                    print("Usage: nfm <n>");
                 }
                 break;
             case "status":
                 print("Game State: " + GameSparker.gameState);
                 break;
+            
             case "clear":
                 textArea.setText("");
                 break;

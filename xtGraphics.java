@@ -266,6 +266,8 @@ class xtGraphics extends Panel implements Runnable {
     private int dev_right = 0;
     public boolean devtriggered = false;
 
+    public int nfmmode = 2;
+
     /**
      * Filter images
      *
@@ -1723,22 +1725,22 @@ class xtGraphics extends Panel implements Runnable {
         //not load/read them directly? Checks if the specific file
         //format exists, then load the music according to stage number.
         //I haven't applied these changes to all other tracks yet.
-        File mp3 = new File("data/music/stage" + i + ".mp3");
-        File ogg = new File("data/music/stage" + i + ".ogg");
-        File mid = new File("data/music/stage" + i + ".mid");
-        File wav = new File("data/music/stage" + i + ".wav");
-        File radq = new File("data/music/stage" + i + ".radq");
+        File mp3 = new File("data/music/" + GameSparker.stageSubDir + "stage" + i + ".mp3");
+        File ogg = new File("data/music/" + GameSparker.stageSubDir + "stage" + i + ".ogg");
+        File mid = new File("data/music/" + GameSparker.stageSubDir + "stage" + i + ".mid");
+        File wav = new File("data/music/" + GameSparker.stageSubDir + "stage" + i + ".wav");
+        File radq = new File("data/music/" + GameSparker.stageSubDir + "stage" + i + ".radq");
         try {
             if (radq.exists()) {
-                strack = TrackZipLoader.loadZip("data/music/stage" + i + ".radq", false);
+                strack = TrackZipLoader.loadZip("data/music/" + GameSparker.stageSubDir + "stage" + i + ".radq", false);
             } else if (ogg.exists()) {
-                strack = TrackZipLoader.loadMusic("data/music/stage" + i + ".ogg");
+                strack = TrackZipLoader.loadMusic("data/music/" + GameSparker.stageSubDir + "stage" + i + ".ogg");
             } else if (mp3.exists()) {
-                strack = TrackZipLoader.loadMusic("data/music/stage" + i + ".mp3");
+                strack = TrackZipLoader.loadMusic("data/music/" + GameSparker.stageSubDir + "stage" + i + ".mp3");
             } else if (wav.exists()) {
-                strack = TrackZipLoader.loadMusic("data/music/stage" + i + ".wav");
+                strack = TrackZipLoader.loadMusic("data/music/" + GameSparker.stageSubDir + "stage" + i + ".wav");
             } else if (mid.exists()) {
-                strack = TrackZipLoader.loadMusic("data/music/stage" + i + ".mid");
+                strack = TrackZipLoader.loadMusic("data/music/" + GameSparker.stageSubDir + "stage" + i + ".mid");
             }
         } catch (final IOException ex) {
             System.out.println("Error loading music file music/stage" + i);

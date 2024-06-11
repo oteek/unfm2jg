@@ -63,6 +63,12 @@ public class GameSparker extends Applet implements Runnable {
 
     private static final String stageDir = "data/stages/";
 
+    public int stageID = 1;
+    public static String stageSubDir = "nfm2/";
+    public static String stageName = "";
+
+    public String loadStage = stageDir + stageSubDir + stageID + ".txt";
+
     /**
      * Set directory for temporary creation of cookies (directory is deleted after writing is complete)
      */
@@ -487,8 +493,15 @@ public class GameSparker extends Applet implements Runnable {
         int t_wall = 0;
         int b_wall = 100;
 
+        loadStage = stageDir + stageSubDir + checkpoints.stage + ".txt";
 
-        try (BufferedReader bufferedreader = new BufferedReader(new FileReader(new File(stageDir + checkpoints.stage + ".txt")))) {
+        if (xtgraphics.nfmmode == 1) {
+            stageSubDir = "nfm1/";
+        } else {
+            stageSubDir = "nfm2/";
+        }
+
+        try (BufferedReader bufferedreader = new BufferedReader(new FileReader(new File(loadStage)))) {
             for (String line; (line = bufferedreader.readLine()) != null; ) {
                 line = line.trim();
 
@@ -952,7 +965,7 @@ public class GameSparker extends Applet implements Runnable {
                     mouses = 2;
             }
             if (xtgraphics.fase == 9000) {          // settings menu
-                xtgraphics.menusettings(u[0]);;
+                xtgraphics.menusettings(u[0]);
                 xtgraphics.ctachm(xm, ym, mouses, u[0]);
                 if (mouses == 2)
                     mouses = 0;
