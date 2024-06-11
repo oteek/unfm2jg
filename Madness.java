@@ -268,7 +268,7 @@ class Madness {
         stat = new Stat();
     }
 
-    public void devFixCar() {   // note: obviously that's not how it's done
+    public void devFixCar() {
         this.squash = 0;
         this.nbsq = 0;
         this.hitmag = 0;
