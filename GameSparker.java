@@ -96,6 +96,7 @@ public class GameSparker extends Applet implements Runnable {
 
     public static String gameState = "None";
     public static int gameStateID;
+    public static int ContosCount;
 
     /**
      * <a href="http://www.expandinghead.net/keycode.html">http://www.expandinghead.net/keycode.html</a>
@@ -399,6 +400,7 @@ public class GameSparker extends Applet implements Runnable {
              * be sure to add your added arrays here            
              */
             HLogger.info("Contos loaded: " + (carModels.length + trackModels.length + extraModels.length));
+            ContosCount = carModels.length + trackModels.length + extraModels.length;
             zipinputstream.close();
         } catch (IOException e) {
             HLogger.error("Error Reading Models: " + e);
