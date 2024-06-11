@@ -21,6 +21,7 @@ public class DevTool {
     private int historyIndex;
 
     public boolean godmode = false;
+    public int oldclrad;
 
     public DevTool(CheckPoints checkpoints, Madness madness[], xtGraphics xt) {
         commandHistory = new ArrayList<>();
@@ -131,8 +132,8 @@ public class DevTool {
                 break;
             case "god":
                 if (GameSparker.gameStateID == 0) {
-                    int oldclrad = madness[0].stat.clrad;
                     if (!godmode) {
+                        oldclrad = madness[0].stat.clrad;
                         madness[0].stat.clrad = 0;
                         print("Godmode ON");
                         godmode = true;
@@ -208,13 +209,13 @@ public class DevTool {
                 }
                 break;
             case "status":
-                print("Game State: " + GameSparker.gameState + "\n");
+                print("Game State: " + GameSparker.gameState);
                 break;
             case "clear":
                 textArea.setText("");
                 break;
             default:
-                print("Unknown command: " + commandName + "\n");
+                print("Unknown command: " + commandName);
                 break;
         }
     }
