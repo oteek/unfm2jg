@@ -33,7 +33,7 @@ public final class TrackZipLoader {
         file = file.toLowerCase(); // TODO check if causes problems on linux
         // systems
 
-        if (file.endsWith(".radq")) {
+        if (file.endsWith(".radq") || file.endsWith(".zipo") || file.endsWith(".zip")) {
             if (f.exists()) {
                 final ZipInputStream zis = new ZipInputStream(new FileInputStream(f));
                 final String zipmodulename = zis.getNextEntry().getName().toLowerCase();
@@ -125,7 +125,7 @@ public final class TrackZipLoader {
     		}
     	}
     	
-    	throw new FileNotFoundException(file + "does not exist");
+    	throw new FileNotFoundException(file + " does not exist");
     }
     
     private static void downloadMusic(final String songname) throws IOException {

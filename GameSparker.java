@@ -656,7 +656,9 @@ public class GameSparker extends Applet implements Runnable {
                 if (line.startsWith("name"))
                     checkpoints.name = Utility.getstring("name", line, 0).replace('|', ',');
                 if (line.startsWith("soundtrack")) {
+                    CheckPoints.customTrack = true;
                     CheckPoints.trackname = Utility.getstring("soundtrack", line, 0);
+                    CheckPoints.trackformat = Utility.getstring("soundtrack", line, 1);
                     //xtGraphics.sndsize[18] = Utility.getint("soundtrack", string, 2);
                 }
                 if (line.startsWith("maxr")) {
