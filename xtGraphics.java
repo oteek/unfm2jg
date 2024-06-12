@@ -3755,10 +3755,13 @@ class xtGraphics extends Panel implements Runnable {
             //         dev_left = 0;
             //         dev_right = 0;
 
-                    HLogger.info("Developer Console triggered");
+                    if (!devtriggered) {
+                        HLogger.info("Developer Console triggered");
 
-                    DevTool console = new DevTool(checkpoints, madness, this);
-                    console.showConsole();
+                        DevTool console = new DevTool(checkpoints, madness, this);
+                        console.showConsole();
+                        devtriggered = true;
+                    }
             //     } else {
             //         dev_up = 0;
             //         dev_down = 0;
