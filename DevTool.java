@@ -225,13 +225,13 @@ public class DevTool {
             case "loadstage":
                 if (args.length == 1) {
                     String path = args[0];
-                    //if (GameSparker.gameStateID == 1) {     // this was coded at 4 am and honestly this might be retarded
+                    if (GameSparker.gameStateID == 1) {
                         checkpoints.stage = -1;
                         xt.fase = 9001;
                         xt.nfmmode = 3;
-                        GameSparker.loadStageCus = path;
+                        GameSparker.loadStageCus = path;    //idk
                         print("Loading stage from: " + path + ".txt");
-                    //}
+                    }
                 } else {
                     print("Usage: loadstage <directory>");
                 }
