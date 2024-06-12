@@ -1725,9 +1725,11 @@ class xtGraphics extends Panel implements Runnable {
         //not load/read them directly? Checks if the specific file
         //format exists, then load the music according to stage number.
         //I haven't applied these changes to all other tracks yet.
+
+        //thank you for your service acv
         String path = "data/music/" + GameSparker.stageSubDir + "stage" + i;
 
-        if (i < 1) {
+        if (i < 1) {  //maybe unhardcode /custom/
             path = "data/music/custom/" + CheckPoints.trackname;
             HLogger.info(path);
         }
@@ -3727,44 +3729,44 @@ class xtGraphics extends Panel implements Runnable {
         int menuItems = 4;
 
         if (GameSparker.DEBUG) {
-            if (control.up) {
-                dev_up++;
-                HLogger.info(dev_up);
-            }
-            if (control.down) {
-                dev_down++;
-                HLogger.info(dev_down);
-            }
-            if (control.left) {
-                dev_left++;
-                HLogger.info(dev_left);
-            }
-            if (control.right) {
-                dev_right++;
-                HLogger.info(dev_right);
-            }
+            // if (control.up) {
+            //     dev_up++;
+            //     HLogger.info(dev_up);
+            // }
+            // if (control.down) {
+            //     dev_down++;
+            //     HLogger.info(dev_down);
+            // }
+            // if (control.left) {
+            //     dev_left++;
+            //     HLogger.info(dev_left);
+            // }
+            // if (control.right) {
+            //     dev_right++;
+            //     HLogger.info(dev_right);
+            // }
 
-            if (control.enter) {
-                if ((dev_up == 1 && dev_down == 7 && dev_left == 3 && dev_right == 8) && !devtriggered) {  //1738
-                    devtriggered = true;
+            // if (control.enter) {
+            //     if ((dev_up == 1 && dev_down == 7 && dev_left == 3 && dev_right == 8) && !devtriggered) {  //1738
+            //         devtriggered = true;
 
-                    dev_up = 0;
-                    dev_down = 0;
-                    dev_left = 0;
-                    dev_right = 0;
+            //         dev_up = 0;
+            //         dev_down = 0;
+            //         dev_left = 0;
+            //         dev_right = 0;
 
                     HLogger.info("Developer Console triggered");
 
                     DevTool console = new DevTool(checkpoints, madness, this);
                     console.showConsole();
-                } else {
-                    dev_up = 0;
-                    dev_down = 0;
-                    dev_left = 0;
-                    dev_right = 0;
-                    HLogger.info("???");
-                }
-            }
+            //     } else {
+            //         dev_up = 0;
+            //         dev_down = 0;
+            //         dev_left = 0;
+            //         dev_right = 0;
+            //         HLogger.info("???");
+            //     }
+            // }
         }
 
         if (flipo == 0) {
