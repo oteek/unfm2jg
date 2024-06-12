@@ -202,8 +202,8 @@ class xtGraphics extends Panel implements Runnable {
     private String asay;
     private int auscnt;
     private boolean aflk;
-    private final int[] sndsize = { //need to add more if you  want more stages :D - Addict
-            106, 76, 56, 116, 92, 208, 70, 80, 152, 102, 27, 65, 52, 30, 151, 129, 70
+    static final int[] sndsize = { //need to add more if you  want more stages :D - Addict
+            106, 76, 56, 116, 92, 208, 70, 80, 152, 102, 27, 65, 52, 30, 151, 129, 70, 0
     };
     private final Image hello;
     private final Image sign;
@@ -1725,22 +1725,29 @@ class xtGraphics extends Panel implements Runnable {
         //not load/read them directly? Checks if the specific file
         //format exists, then load the music according to stage number.
         //I haven't applied these changes to all other tracks yet.
-        File mp3 = new File("data/music/" + GameSparker.stageSubDir + "stage" + i + ".mp3");
-        File ogg = new File("data/music/" + GameSparker.stageSubDir + "stage" + i + ".ogg");
-        File mid = new File("data/music/" + GameSparker.stageSubDir + "stage" + i + ".mid");
-        File wav = new File("data/music/" + GameSparker.stageSubDir + "stage" + i + ".wav");
-        File radq = new File("data/music/" + GameSparker.stageSubDir + "stage" + i + ".radq");
+        String path = "data/music/" + GameSparker.stageSubDir + "stage" + i;
+
+        if (i < 1) {
+            path = "data/music/custom/" + CheckPoints.trackname;
+            HLogger.info(path);
+        }
+
+        File mp3 = new File(path + ".mp3");
+        File ogg = new File(path + ".ogg");
+        File mid = new File(path + ".mid");
+        File wav = new File(path + ".wav");
+        File radq = new File(path + ".radq");
         try {
             if (radq.exists()) {
-                strack = TrackZipLoader.loadZip("data/music/" + GameSparker.stageSubDir + "stage" + i + ".radq", false);
+                strack = TrackZipLoader.loadZip(path + ".radq", false);
             } else if (ogg.exists()) {
-                strack = TrackZipLoader.loadMusic("data/music/" + GameSparker.stageSubDir + "stage" + i + ".ogg");
+                strack = TrackZipLoader.loadMusic(path + ".ogg");
             } else if (mp3.exists()) {
-                strack = TrackZipLoader.loadMusic("data/music/" + GameSparker.stageSubDir + "stage" + i + ".mp3");
+                strack = TrackZipLoader.loadMusic(path + ".mp3");
             } else if (wav.exists()) {
-                strack = TrackZipLoader.loadMusic("data/music/" + GameSparker.stageSubDir + "stage" + i + ".wav");
+                strack = TrackZipLoader.loadMusic(path + ".wav");
             } else if (mid.exists()) {
-                strack = TrackZipLoader.loadMusic("data/music/" + GameSparker.stageSubDir + "stage" + i + ".mid");
+                strack = TrackZipLoader.loadMusic(path + ".mid");
             }
         } catch (final IOException ex) {
             System.out.println("Error loading music file music/stage" + i);
@@ -3250,11 +3257,13 @@ class xtGraphics extends Panel implements Runnable {
         rd.fillRoundRect(GameFacts.screenWidth/2 - 70, 20, 145, 27,23,30);
         rd.drawImage(select, GameFacts.screenWidth/2 - 60, 25, null);
 
-        if (checkpoints.stage != 1) {
-            rd.drawImage(back[pback], 50, 110, null);
-        }
-        if (checkpoints.stage != GameFacts.numberOfStages) {
-            rd.drawImage(next[pnext], 560, 110, null);
+        if (checkpoints.stage > 0) {
+            if (checkpoints.stage != 1) {
+                rd.drawImage(back[pback], 50, 110, null);
+            }
+            if (checkpoints.stage != GameFacts.numberOfStages) {
+                rd.drawImage(next[pnext], 560, 110, null);
+            }
         }
 
         //rectangle     borrowed from g6
@@ -3264,10 +3273,14 @@ class xtGraphics extends Panel implements Runnable {
         rd.setFont(new Font("SansSerif", 1, 13));
         FontHandler.fMetrics = rd.getFontMetrics();
 
-        if (checkpoints.stage != GameFacts.numberOfStages) {
+        if (checkpoints.stage != GameFacts.numberOfStages && checkpoints.stage > 0) {
             drawcs(80, "< Stage " + checkpoints.stage + " >", 255, 255, 255, 3);
-        } else {
+        }
+        if (checkpoints.stage == GameFacts.numberOfStages) {
             drawcs(80, "< Final Stage >", 255, 255, 255, 3);
+        }
+        if (checkpoints.stage < 0) {
+            drawcs(80, "< Custom Stage >", 255, 255, 255, 3);
         }
         drawcs(100, "| " + checkpoints.name + " |", 210, 210, 210, 3);
         rd.drawImage(contin[pcontin], 290, 325, null);
@@ -5073,8 +5086,8 @@ class xtGraphics extends Panel implements Runnable {
         FontHandler.fMetrics = rd.getFontMetrics();
         drawcs(25, asay, 0, 0, 0, 3);
         byte byte0 = -90;
-        if (i == unlocked && (i == 1 || i == 2 || i == 3 || i == 4 || i == 7 || i == 8 || i == 9 || i == 10 || i == 12
-                || i == 13 || i == 16)) {
+        if (i == 1 || i == 2 || i == 3 || i == 4 || i == 7 || i == 8 || i == 9 || i == 10 || i == 12
+                || i == 13 || i == 16) {
             byte0 = 0;
         }
         if (byte0 == 0) {
@@ -5180,7 +5193,7 @@ class xtGraphics extends Panel implements Runnable {
         rd.setFont(new Font("SansSerif", 1, 11));
         FontHandler.fMetrics = rd.getFontMetrics();
         if (!flag) {
-            drawcs(315 + byte0, "" + sndsize[i - 1] + " KB", 0, 0, 0, 3);
+            // drawcs(315 + byte0, "" + sndsize[i - 1] + " KB", 0, 0, 0, 3);
             drawcs(350 + byte0, " Please Wait...", 0, 0, 0, 3);
         } else {
             drawcs(340 + byte0, "Loading complete!  Press Start to begin...", 0, 0, 0, 3);

@@ -12,6 +12,7 @@ class CheckPoints {
     public final int[] fy = new int[5];
     public final boolean[] roted = new boolean[5];
     public final boolean[] special = new boolean[5];
+    static String trackname = "";
     public int fn = 0;
     public int stage = 1;
     public int nlaps = 0;

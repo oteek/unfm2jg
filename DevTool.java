@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -82,6 +83,15 @@ public class DevTool {
 
     public void print(String s) {
         textArea.append(s + "\n");
+    }
+
+    private String extractFileNameWithoutExtension(String path) {
+        String fileName = new File(path).getName();
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex != -1) {
+            fileName = fileName.substring(0, dotIndex);
+        }
+        return fileName;
     }
 
     private void executeCommand(String command, CheckPoints checkpoints, Madness madness[], xtGraphics xt) {
@@ -169,7 +179,7 @@ public class DevTool {
                         print("Invalid argument.");
                     }
                 } else {
-                    print("Usage: setfase <n>");
+                    print("Usage: fase <n>");
                 }
                 break;
             case "spawn_ai":
@@ -210,6 +220,20 @@ public class DevTool {
                     }
                 } else {
                     print("Usage: nfm <n>");
+                }
+                break;
+            case "loadstage":
+                if (args.length == 1) {
+                    String path = args[0];
+                    //if (GameSparker.gameStateID == 1) {     // this was coded at 4 am and honestly this might be retarded
+                        checkpoints.stage = -1;
+                        xt.fase = 9001;
+                        xt.nfmmode = 3;
+                        GameSparker.loadStageCus = path;
+                        print("Loading stage from: " + path + ".txt");
+                    //}
+                } else {
+                    print("Usage: loadstage <directory>");
                 }
                 break;
             case "status":

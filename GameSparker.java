@@ -68,6 +68,7 @@ public class GameSparker extends Applet implements Runnable {
     public static String stageName = "";
 
     public String loadStage = stageDir + stageSubDir + stageID + ".txt";
+    public static String loadStageCus;
 
     /**
      * Set directory for temporary creation of cookies (directory is deleted after writing is complete)
@@ -472,8 +473,9 @@ public class GameSparker extends Applet implements Runnable {
      * @param record      record instance
      * @author Kaffeinated, Omar Waly
      */
+
     private void loadstage(ContO aconto[], ContO aconto1[], Trackers trackers, CheckPoints checkpoints,
-                           xtGraphics xtgraphics, Madness amadness[], Record record) {
+                           xtGraphics xtgraphics, Madness amadness[], Record record, boolean custom) {
         trackers.nt = 0;
         nob = GameFacts.numberOfPlayers;
         notb = 0;
@@ -494,12 +496,18 @@ public class GameSparker extends Applet implements Runnable {
         int b_wall = 100;
 
         loadStage = stageDir + stageSubDir + checkpoints.stage + ".txt";
-
         if (xtgraphics.nfmmode == 1) {
             stageSubDir = "nfm1/";
-        } else {
+        } else if (xtgraphics.nfmmode == 2) {
             stageSubDir = "nfm2/";
         }
+
+        if (custom) {
+            loadStage = stageDir + loadStageCus + ".txt";
+            HLogger.info(loadStage);
+        }
+
+        String string = "";
 
         try (BufferedReader bufferedreader = new BufferedReader(new FileReader(new File(loadStage)))) {
             for (String line; (line = bufferedreader.readLine()) != null; ) {
@@ -647,6 +655,10 @@ public class GameSparker extends Applet implements Runnable {
                     checkpoints.nlaps = Utility.getint("nlaps", line, 0);
                 if (line.startsWith("name"))
                     checkpoints.name = Utility.getstring("name", line, 0).replace('|', ',');
+                if (line.startsWith("soundtrack")) {
+                    CheckPoints.trackname = Utility.getstring("soundtrack", line, 0);
+                    //xtGraphics.sndsize[18] = Utility.getint("soundtrack", string, 2);
+                }
                 if (line.startsWith("maxr")) {
                     int j2 = Utility.getint("maxr", line, 0);
                     int j3 = Utility.getint("maxr", line, 1);
@@ -1042,8 +1054,13 @@ public class GameSparker extends Applet implements Runnable {
             }
             if (xtgraphics.fase == 2) {
                 xtgraphics.loadingstage(checkpoints.stage);
-                loadstage(aconto1, aconto, trackers, checkpoints, xtgraphics, amadness, record);
+                loadstage(aconto1, aconto, trackers, checkpoints, xtgraphics, amadness, record, false);
                 u[0].falseo();
+            }
+            if (xtgraphics.fase == 9001) {      // for custom stage loading
+                repaint();
+                loadstage(aconto1, aconto, trackers, checkpoints, xtgraphics, amadness, record, true);
+                xtgraphics.fase = 1;
             }
             if (xtgraphics.fase == 1) {
                 rd.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
