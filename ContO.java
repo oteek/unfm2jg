@@ -218,6 +218,7 @@ public class ContO {
         boolean flag3 = false;
         boolean flag4 = false;
         Wheels wheels = new Wheels();
+        boolean bool8 = false;
         int j = 0;
         int k = 1;
         int l = 0;
@@ -313,67 +314,70 @@ public class ContO {
                     skd = new int[k1];
                     dam = new int[k1];
                     notwall = new boolean[k1];
+                    bool8 = true; //fix from nfmm, this ensures that collision related stuff only get read if tracks(x) exists, otherwise vanilla nfm crashes without this
                 }
-                if (line.startsWith("<track>")) {
-                    flag1 = true;
-                    notwall[tnt] = false;
-                    dam[tnt] = 1;
-                    skd[tnt] = 0;
-                    ty[tnt] = 0;
-                    tx[tnt] = 0;
-                    tz[tnt] = 0;
-                    txy[tnt] = 0;
-                    tzy[tnt] = 0;
-                    trady[tnt] = 0;
-                    tradx[tnt] = 0;
-                    tradz[tnt] = 0;
-                    tc[tnt][0] = 0;
-                    tc[tnt][1] = 0;
-                    tc[tnt][2] = 0;
-                }
-                if (flag1) {
-                    if (line.startsWith("c")) {
-                        tc[tnt][0] = Utility.getint("c", line, 0);
-                        tc[tnt][1] = Utility.getint("c", line, 1);
-                        tc[tnt][2] = Utility.getint("c", line, 2);
+                if (bool8) {
+                    if (line.startsWith("<track>")) {
+                        flag1 = true;
+                        notwall[tnt] = false;
+                        dam[tnt] = 1;
+                        skd[tnt] = 0;
+                        ty[tnt] = 0;
+                        tx[tnt] = 0;
+                        tz[tnt] = 0;
+                        txy[tnt] = 0;
+                        tzy[tnt] = 0;
+                        trady[tnt] = 0;
+                        tradx[tnt] = 0;
+                        tradz[tnt] = 0;
+                        tc[tnt][0] = 0;
+                        tc[tnt][1] = 0;
+                        tc[tnt][2] = 0;
                     }
-                    if (line.startsWith("xy")) {
-                        txy[tnt] = Utility.getint("xy", line, 0);
+                    if (flag1) {
+                        if (line.startsWith("c")) {
+                            tc[tnt][0] = Utility.getint("c", line, 0);
+                            tc[tnt][1] = Utility.getint("c", line, 1);
+                            tc[tnt][2] = Utility.getint("c", line, 2);
+                        }
+                        if (line.startsWith("xy")) {
+                            txy[tnt] = Utility.getint("xy", line, 0);
+                        }
+                        if (line.startsWith("zy")) {
+                            tzy[tnt] = Utility.getint("zy", line, 0);
+                        }
+                        if (line.startsWith("radx")) {
+                            tradx[tnt] = (int) (Utility.getint("radx", line, 0) * f);
+                        }
+                        if (line.startsWith("rady")) {
+                            trady[tnt] = (int) (Utility.getint("rady", line, 0) * f);
+                        }
+                        if (line.startsWith("radz")) {
+                            tradz[tnt] = (int) (Utility.getint("radz", line, 0) * f);
+                        }
+                        if (line.startsWith("ty")) {
+                            ty[tnt] = (int) (Utility.getint("ty", line, 0) * f);
+                        }
+                        if (line.startsWith("tx")) {
+                            tx[tnt] = (int) (Utility.getint("tx", line, 0) * f);
+                        }
+                        if (line.startsWith("tz")) {
+                            tz[tnt] = (int) (Utility.getint("tz", line, 0) * f);
+                        }
+                        if (line.startsWith("skid")) {
+                            skd[tnt] = Utility.getint("skid", line, 0);
+                        }
+                        if (line.startsWith("dam")) {
+                            dam[tnt] = 3;
+                        }
+                        if (line.startsWith("notwall")) {
+                            notwall[tnt] = true;
+                        }
                     }
-                    if (line.startsWith("zy")) {
-                        tzy[tnt] = Utility.getint("zy", line, 0);
+                    if (line.startsWith("</track>")) {
+                        flag1 = false;
+                        tnt++;
                     }
-                    if (line.startsWith("radx")) {
-                        tradx[tnt] = (int) (Utility.getint("radx", line, 0) * f);
-                    }
-                    if (line.startsWith("rady")) {
-                        trady[tnt] = (int) (Utility.getint("rady", line, 0) * f);
-                    }
-                    if (line.startsWith("radz")) {
-                        tradz[tnt] = (int) (Utility.getint("radz", line, 0) * f);
-                    }
-                    if (line.startsWith("ty")) {
-                        ty[tnt] = (int) (Utility.getint("ty", line, 0) * f);
-                    }
-                    if (line.startsWith("tx")) {
-                        tx[tnt] = (int) (Utility.getint("tx", line, 0) * f);
-                    }
-                    if (line.startsWith("tz")) {
-                        tz[tnt] = (int) (Utility.getint("tz", line, 0) * f);
-                    }
-                    if (line.startsWith("skid")) {
-                        skd[tnt] = Utility.getint("skid", line, 0);
-                    }
-                    if (line.startsWith("dam")) {
-                        dam[tnt] = 3;
-                    }
-                    if (line.startsWith("notwall")) {
-                        notwall[tnt] = true;
-                    }
-                }
-                if (line.startsWith("</track>")) {
-                    flag1 = false;
-                    tnt++;
                 }
                 if (line.startsWith("disp")) {
                     disp = Utility.getint("disp", line, 0);

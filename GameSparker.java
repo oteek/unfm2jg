@@ -51,8 +51,9 @@ public class GameSparker extends Applet implements Runnable {
             "roblend", "noblend", "rnblend", "roadend", "offroadend", "hpground", "ramp30", "cramp35", "dramp15",
             "dhilo15", "slide10", "takeoff", "sramp22", "offbump", "offramp", "sofframp", "halfpipe", "spikes", "rail",
             "thewall", "checkpoint", "fixpoint", "offcheckpoint", "sideoff", "bsideoff", "uprise", "riseroad", "sroad",
-            "soffroad"
-
+            "soffroad", "tside", "launchpad", "thenet", "speedramp", "offhill", "slider", "uphill", "roll1", "roll2",
+            "roll3", "roll4", "roll5", "roll6", "opile1", "opile2", "aircheckpoint", "tree1", "tree2", "tree3", "tree4",
+            "tree5", "tree6", "tree7", "tree8", "cac1", "cac2", "cac3", "8sroad", "8soffroad"
     };
     private static final String[] extraModels = {};
 
@@ -495,6 +496,8 @@ public class GameSparker extends Applet implements Runnable {
         int t_wall = 0;
         int b_wall = 100;
 
+        CheckPoints.customTrack = false;
+
         loadStage = stageDir + stageSubDir + checkpoints.stage + ".txt";
         if (xtgraphics.nfmmode == 1) {
             stageSubDir = "nfm1/";
@@ -853,7 +856,7 @@ public class GameSparker extends Applet implements Runnable {
         Record record = new Record();
         ContO aconto[] = new ContO[carModels.length + trackModels.length + extraModels.length]; // be sure all your arrays get in here
         loadbase(aconto, trackers, xtgraphics);
-        ContO aconto1[] = new ContO[3000];
+        ContO aconto1[] = new ContO[5000];
         Madness amadness[] = new Madness[51];
         int l = 0;
         do {
@@ -963,7 +966,7 @@ public class GameSparker extends Applet implements Runnable {
                     mouses = 2;
             }
             if (xtgraphics.fase == 10) {
-                xtgraphics.maini(u[0], checkpoints, amadness);
+                xtgraphics.maini(u[0], checkpoints, amadness, aconto, aconto1);
                 xtgraphics.ctachm(xm, ym, mouses, u[0]);
                 if (mouses == 2)
                     mouses = 0;

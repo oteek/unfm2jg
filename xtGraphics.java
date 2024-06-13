@@ -1751,8 +1751,6 @@ class xtGraphics extends Panel implements Runnable {
                     loadedt = true;
                     return;
                 }
-            } else {
-                CheckPoints.customTrack = false;
             }
         //}
 
@@ -1761,9 +1759,15 @@ class xtGraphics extends Panel implements Runnable {
         File mid = new File(path + ".mid");
         File wav = new File(path + ".wav");
         File radq = new File(path + ".radq");
+        File zip = new File(path + ".zip");
+        File zipo = new File(path + ".zipo");
         try {
             if (radq.exists()) {
                 strack = TrackZipLoader.loadZip(path + ".radq", false);
+            } else if (zip.exists()) {
+                strack = TrackZipLoader.loadZip(path + ".zip", false);
+            } else if (zipo.exists()) {
+                strack = TrackZipLoader.loadZip(path + ".zipo", false);
             } else if (ogg.exists()) {
                 strack = TrackZipLoader.loadMusic(path + ".ogg");
             } else if (mp3.exists()) {
@@ -3744,7 +3748,7 @@ class xtGraphics extends Panel implements Runnable {
         loadedt = false;
     }
 
-    public void maini(Control control, CheckPoints checkpoints, Madness madness[]) {
+    public void maini(Control control, CheckPoints checkpoints, Madness madness[], ContO conto[], ContO conto1[]) {
 
         // might redo the entire menu its horrible
 
@@ -3780,7 +3784,7 @@ class xtGraphics extends Panel implements Runnable {
                     if (!devtriggered) {
                         HLogger.info("Developer Console triggered");
 
-                        DevTool console = new DevTool(checkpoints, madness, this);
+                        DevTool console = new DevTool(checkpoints, madness, conto, conto1, this);
                         console.showConsole();
                         devtriggered = true;
                     }

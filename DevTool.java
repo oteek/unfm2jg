@@ -4,10 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Developer console for Need For Madness
@@ -24,9 +25,14 @@ public class DevTool {
     public boolean godmode = false;
     public int oldclrad;
 
-    public DevTool(CheckPoints checkpoints, Madness madness[], xtGraphics xt) {
+    private Map<String, String> commandDescriptions; // for help command
+
+    public DevTool(CheckPoints checkpoints, Madness madness[], ContO conto[], ContO conto1[], xtGraphics xt) {
         commandHistory = new ArrayList<>();
         historyIndex = -1;
+
+        commandDescriptions = new HashMap<>();
+        populateCommandDescriptions();
 
         frame = new JFrame("UNFM2 Developer Console");
         textArea = new JTextArea();
@@ -39,7 +45,7 @@ public class DevTool {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String command = inputField.getText();
-                executeCommand(command, checkpoints, madness, xt);
+                executeCommand(command, checkpoints, madness, conto, conto1, xt);
                 if (!command.trim().isEmpty()) {
                     commandHistory.add(command);
                     historyIndex = commandHistory.size();
@@ -85,16 +91,7 @@ public class DevTool {
         textArea.append(s + "\n");
     }
 
-    private String extractFileNameWithoutExtension(String path) {
-        String fileName = new File(path).getName();
-        int dotIndex = fileName.lastIndexOf('.');
-        if (dotIndex != -1) {
-            fileName = fileName.substring(0, dotIndex);
-        }
-        return fileName;
-    }
-
-    private void executeCommand(String command, CheckPoints checkpoints, Madness madness[], xtGraphics xt) {
+    private void executeCommand(String command, CheckPoints checkpoints, Madness madness[], ContO conto[], ContO conto1[], xtGraphics xt) {
         textArea.append("> " + command + "\n");
 
         String[] parts = command.split(" ");
@@ -183,22 +180,15 @@ public class DevTool {
                 }
                 break;
             case "spawn_ai":
-                if (args.length == 1) {
-                    try {
-                        int n = Integer.parseInt(args[0]);
-                        if (GameSparker.gameStateID == 0) {
-                            if ((n >= 0 && n <= GameFacts.numberOfCars - 1)) {
-                                // snip
-                                print("Spawned " + xt.names[xt.sc[n]]);
-                            } else {
-                                print("Invalid car number.");
-                            }
-                        } else {
-                            print("This command only works in game.");
-                        }
-                    } catch (NumberFormatException e) {
-                        print("Invalid argument.");
-                    }
+                if (GameSparker.gameStateID == 0) {
+
+                    int n = GameFacts.numberOfPlayers + 1;
+
+                    conto[n] = new ContO(conto1[xt.sc[n]], 0, 250 - conto1[xt.sc[n]].grat, -760 + ((n / 3) * 760), 0);
+                    madness[n].reseto(xt.sc[n], conto[n], checkpoints);
+                    print("Spawned " + xt.names[xt.sc[n]]);
+                } else {
+                    print("This command only works in game.");
                 }
                 break;
             case "nfm":
@@ -206,9 +196,13 @@ public class DevTool {
                     try {
                         int n = Integer.parseInt(args[0]);
                         if (GameSparker.gameStateID == 10) {
-                            if ((n >= 1 && n <= 2)) {
+                            if ((n >= 1 && n <= 3)) {
                                 xt.nfmmode = n;
-                                print("Need For Madness " + n);
+                                if (n < 2) {
+                                    print("Need For Madness " + n);
+                                } else {
+                                    print("Freeplay mode");
+                                }
                             } else {
                                 print("Prevented from creating a paradox.");
                             }
@@ -224,16 +218,34 @@ public class DevTool {
                 break;
             case "loadstage":
                 if (args.length == 1) {
-                    String path = args[0];
-                    if (GameSparker.gameStateID == 1) {
-                        checkpoints.stage = -1;
-                        xt.fase = 9001;
-                        xt.nfmmode = 3;
-                        GameSparker.loadStageCus = path;    //idk
-                        print("Loading stage from: " + path + ".txt");
+                    try {
+                        String path = args[0];
+                        if (GameSparker.gameStateID == 1) {
+                            checkpoints.stage = -1;
+                            xt.fase = 9001;
+                            xt.nfmmode = 3;
+                            GameSparker.loadStageCus = path;    //idk
+                            print("Loading stage from: " + path + ".txt");
+                        }
+                    } catch (NumberFormatException e) {
+                        print("Invalid argument.");
                     }
                 } else {
                     print("Usage: loadstage <directory>");
+                }
+                break;
+            case "stagesubdir":
+                if (args.length == 1) {
+                    try {
+                        String sub = args[0];
+                            GameSparker.stageSubDir = sub + "/";    //idk
+                            xt.nfmmode = 3;
+                            print("Set stage subdir to " + sub);
+                    } catch (NumberFormatException e) {
+                        print("Invalid argument.");
+                    }
+                } else {
+                    print("Usage: stagesubdir <subdir>");
                 }
                 break;
             case "status":
@@ -243,13 +255,41 @@ public class DevTool {
             case "clear":
                 textArea.setText("");
                 break;
+            case "help":
+                if (args.length == 0) {
+                    print("Available commands:");
+                    for (String cmd : commandDescriptions.keySet()) {
+                        print(cmd);
+                    }
+                } else if (args.length == 1) {
+                    String helpCommand = args[0];
+                    if (commandDescriptions.containsKey(helpCommand)) {
+                        print(helpCommand + ": " + commandDescriptions.get(helpCommand));
+                    } else {
+                        print("No help available for unknown command: " + helpCommand);
+                    }
+                } else {
+                    print("Usage: help <command>");
+                }
+                break;
             default:
                 print("Unknown command: " + commandName);
                 break;
         }
     }
-    // public static void main(String[] args) {
-    //     DevTool console = new DevTool();
-    //     console.showConsole();
-    // }
+    
+    private void populateCommandDescriptions() {
+        commandDescriptions.put("nplayers", "Sets the number of players. Usage: nplayers <1-51>");
+        commandDescriptions.put("fix", "Fixes the specified car. Usage: fix <n>");
+        commandDescriptions.put("god", "Toggles god mode.");
+        commandDescriptions.put("unlocked", "Sets the unlocked value in xtGraphics. Usage: unlocked <n>");
+        commandDescriptions.put("fase", "Sets the phase in xtGraphics. Usage: fase <n>");
+        commandDescriptions.put("spawn_ai", "Spawns an AI car (unimplemented properly yet).");
+        commandDescriptions.put("nfm", "Sets the NFM mode. Usage: nfm <n>");
+        commandDescriptions.put("loadstage", "Loads a stage from the specified path. Usage: loadstage <directory>");
+        commandDescriptions.put("stagesubdir", "Sets the stage subdirectory. Usage: stagesubdir <subdir>");
+        commandDescriptions.put("status", "Displays the current game state.");
+        commandDescriptions.put("clear", "Clears the console.");
+        commandDescriptions.put("help", "Displays help information. Usage: help [command]");
+    }
 }
