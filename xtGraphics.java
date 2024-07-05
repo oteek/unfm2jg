@@ -1,14 +1,12 @@
 import fallk.logmaster.HLogger;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.*;
+import java.net.*;
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.image.*;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
@@ -267,6 +265,13 @@ class xtGraphics extends Panel implements Runnable {
     public boolean devtriggered = false;
 
     public int nfmmode = 2;
+
+
+
+    public static String serverip = "127.0.0.1";
+    public static int serverport = 6900;
+    Socket socket = null;
+    BufferedReader serverresponse = null;
 
     /**
      * Filter images
@@ -3089,6 +3094,7 @@ class xtGraphics extends Panel implements Runnable {
             if (checkpoints.stage == unlocked && winner && unlocked != GameFacts.numberOfStages) {
                 checkpoints.stage++;
                 unlocked++;
+                HLogger.info(unlocked);
             }
             flipo = 0;
             control.enter = false;

@@ -53,7 +53,7 @@ public class GameSparker extends Applet implements Runnable {
             "thewall", "checkpoint", "fixpoint", "offcheckpoint", "sideoff", "bsideoff", "uprise", "riseroad", "sroad",
             "soffroad", "tside", "launchpad", "thenet", "speedramp", "offhill", "slider", "uphill", "roll1", "roll2",
             "roll3", "roll4", "roll5", "roll6", "opile1", "opile2", "aircheckpoint", "tree1", "tree2", "tree3", "tree4",
-            "tree5", "tree6", "tree7", "tree8", "cac1", "cac2", "cac3", "8sroad", "8soffroad"
+            "tree5", "tree6", "tree7", "tree8", "cac1", "cac2", "cac3", "8sroad", "8soffroad", "singlewallroad"
     };
     private static final String[] extraModels = {};
 
@@ -591,6 +591,29 @@ public class GameSparker extends Applet implements Runnable {
                         if (line.contains(")ph")) {
                             checkpoints.typ[checkpoints.n] = -4;
                         }
+                        checkpoints.n++;
+                        notb = nob + 1;
+                    }
+                    nob++;
+                }
+                if (line.startsWith("ds:set")) {
+                    String modelname = Utility.getstring("ds:set", line, 0);
+                    int id = getModel(modelname);
+                    aconto[nob] = new ContO(aconto1[id], Utility.getint("ds:set", line, 1), Medium.ground - aconto1[id].grat,
+                            Utility.getint("ds:set", line, 2), Utility.getint("ds:set", line, 3));
+                    if (line.contains(")p")) {
+                        checkpoints.x[checkpoints.n] = Utility.getint("ds:set", line, 1);
+                        checkpoints.z[checkpoints.n] = Utility.getint("ds:set", line, 2);
+                        checkpoints.y[checkpoints.n] = 0;
+                        checkpoints.typ[checkpoints.n] = 0;
+                        if (line.contains(")pt"))
+                            checkpoints.typ[checkpoints.n] = -1;
+                        if (line.contains(")pr"))
+                            checkpoints.typ[checkpoints.n] = -2;
+                        if (line.contains(")po"))
+                            checkpoints.typ[checkpoints.n] = -3;
+                        if (line.contains(")ph"))
+                            checkpoints.typ[checkpoints.n] = -4;
                         checkpoints.n++;
                         notb = nob + 1;
                     }

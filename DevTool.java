@@ -4,11 +4,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Developer console for Need For Madness
@@ -251,7 +257,62 @@ public class DevTool {
             case "status":
                 print("Game State: " + GameSparker.gameState);
                 break;
-            
+            case "connect":
+                if (args.length == 1) {
+                    String sub = args[0];
+                    try {
+                        // Validate and parse IP and port
+                        String regex = "^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}):(\\d{1,5})$";
+                        Pattern pattern = Pattern.compile(regex);
+                        Matcher matcher = pattern.matcher(sub);
+
+                        if (matcher.matches()) {
+                            String ip = matcher.group(1);
+                            int port = Integer.parseInt(matcher.group(2));
+
+                            // Validate IP and port range
+                            if (isValidIP(ip) && port >= 0 && port <= 65535) {
+                                print("Connecting to " + ip + " on port " + port + "...");
+
+                                try {
+                                    
+                                    xt.socket = new Socket(ip, port);
+                                    print("Connected to the server");
+
+                                    // Get the input stream to receive data from the server
+                                    xt.serverresponse = new BufferedReader(new InputStreamReader(xt.socket.getInputStream()));
+
+                                    // Read the message from the server
+                                    String message = xt.serverresponse.readLine();
+                                    print("Server says: " + message);
+
+                                } catch (java.net.ConnectException e) {
+                                    print(e.getMessage());
+                                } catch (IOException e) {
+                                    print("An error occurred:\n" + e.toString());
+                                } finally {
+                                    // Close the streams and sockets
+                                    try {
+                                        if (xt.serverresponse != null) xt.serverresponse.close();
+                                        if (xt.socket != null) xt.socket.close();
+                                    } catch (IOException e) {
+                                        print("An error occurred:\n" + e.toString());
+                                    }
+                                }
+
+                            } else {
+                                print("Invalid IP address or port range.");
+                            }
+                        } else {
+                            print("Invalid IP:Port format.");
+                        }
+                    } catch (NumberFormatException e) {
+                        print("Invalid port number.");
+                    }
+                } else {
+                    print("Usage: connect <ip:port>");
+                }
+                break;
             case "clear":
                 textArea.setText("");
                 break;
@@ -276,6 +337,20 @@ public class DevTool {
                 print("Unknown command: " + commandName);
                 break;
         }
+    }
+
+    private boolean isValidIP(String ip) {
+        String[] parts = ip.split("\\.");
+        if (parts.length != 4) {
+            return false;
+        }
+        for (String part : parts) {
+            int num = Integer.parseInt(part);
+            if (num < 0 || num > 255) {
+                return false;
+            }
+        }
+        return true;
     }
     
     private void populateCommandDescriptions() {
