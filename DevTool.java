@@ -29,6 +29,7 @@ public class DevTool {
     private int historyIndex;
 
     public boolean godmode = false;
+    public boolean debugstat = false;
     public int oldclrad;
 
     private Map<String, String> commandDescriptions; // for help command
@@ -111,10 +112,15 @@ public class DevTool {
                         int nplayers = Integer.parseInt(args[0]);
                         if (GameSparker.gameStateID > 1) {
                             if ((nplayers >= 1 && nplayers <= 51)) {
-                                GameFacts.numberOfPlayers = nplayers;
-                                print("Number of players set to " + nplayers + ".");
+                                //GameFacts.numberOfPlayers = nplayers;
+                                xt.nplayers_debug = true;
+                                xt.nplayers_override = nplayers;
+                                print("Numbers of players set to " + nplayers + ", overriden for all stages.");
+                            } else if (nplayers == 0) {
+                                xt.nplayers_debug = false;
+                                print("Number of players are now determined by stage\n(xtGraphics, public void carspergame)");
                             } else {
-                                print("Player number cannot be less than 1 or greater than 51.");
+                                print("Invalid player number.");
                             }
                         } else {
                             print("This command only works in menus and before stage select.");
@@ -123,7 +129,7 @@ public class DevTool {
                         print("Invalid number of players.\n");
                     }
                 } else {
-                    print("nplayers is " + GameFacts.numberOfPlayers + "\nUsage: nplayers <1-51>");
+                    print("nplayers is " + GameFacts.numberOfPlayers + "\nUsage: nplayers <0-51>");
                 }
                 break;
             case "fix":
@@ -157,6 +163,41 @@ public class DevTool {
                     }
                 } else {
                     print("This command only works in game.");
+                }
+                break;
+            case "spectate":
+                if (args.length == 1) {
+                    try {
+                        int n = Integer.parseInt(args[0]);
+                        if (GameSparker.gameStateID == 0) {
+                            if (n > 0 && n < GameFacts.numberOfPlayers) {
+                                xt.spectate = n;
+                                print("Spectating [AI]" + xt.names[xt.sc[n]]);
+                            } else if (n == 0) {
+                                xt.spectate = n;
+                                print("Spectating [Player]" + xt.names[xt.sc[n]]);
+                            } else {
+                                print("Invalid player ID.");
+                            }
+                        } else {
+                            print("This command only works in game.");
+                        }
+                    } catch (NumberFormatException e) {
+                        print("Invalid argument.");
+                    }
+                } else {
+                    print("Usage: spectate <n>");
+                }
+                break;
+            case "debug":
+                if (!debugstat) {
+                    xt.debugmode = true;
+                    print("Debug mode enabled.");
+                    debugstat = true;
+                } else {
+                    xt.debugmode = false;
+                    print("Debug mode disabled");
+                    godmode = false;
                 }
                 break;
             case "unlocked":
@@ -359,12 +400,13 @@ public class DevTool {
         commandDescriptions.put("god", "Toggles god mode.");
         commandDescriptions.put("unlocked", "Sets the unlocked value in xtGraphics. Usage: unlocked <n>");
         commandDescriptions.put("fase", "Sets the phase in xtGraphics. Usage: fase <n>");
-        commandDescriptions.put("spawn_ai", "Spawns an AI car (unimplemented properly yet).");
+        commandDescriptions.put("spawn_ai", "Spawns an AI car (unimplemented).");
         commandDescriptions.put("nfm", "Sets the NFM mode. Usage: nfm <n>");
         commandDescriptions.put("loadstage", "Loads a stage from the specified path. Usage: loadstage <directory>");
         commandDescriptions.put("stagesubdir", "Sets the stage subdirectory. Usage: stagesubdir <subdir>");
         commandDescriptions.put("status", "Displays the current game state.");
         commandDescriptions.put("clear", "Clears the console.");
-        commandDescriptions.put("help", "Displays help information. Usage: help [command]");
+        commandDescriptions.put("connect", "Connects to a server. Usage: connect <ip:port>");
+        commandDescriptions.put("help", "Displays help information. Usage: help <command>");
     }
 }

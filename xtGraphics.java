@@ -264,6 +264,15 @@ class xtGraphics extends Panel implements Runnable {
     private int dev_right = 0;
     public boolean devtriggered = false;
 
+    public boolean fixedsort = false;
+
+    public boolean nplayers_debug = false;
+    public int nplayers_override = 7;
+
+    public boolean debugmode = false;
+
+    public int spectate = 0;
+
     public int nfmmode = 2;
 
 
@@ -570,8 +579,24 @@ class xtGraphics extends Panel implements Runnable {
 
     public void carspergame(CheckPoints checkpoints) {
         if (!setnumber) {
-            //GameFacts.numberOfPlayers = 7;
             setnumber = true;
+
+            if (!nplayers_debug) {
+                switch (checkpoints.stage) {
+                    // case 2:
+                    //     GameFacts.numberOfPlayers = 10;
+                    //     break;
+                    // case 5:
+                    //     GameFacts.numberOfPlayers = 13;
+                    //     break;
+                    default:
+                        GameFacts.numberOfPlayers = 7;
+                        break;
+                }
+            } else {
+                GameFacts.numberOfPlayers = nplayers_override;
+            }
+
             if (GameFacts.numberOfPlayers == 1) {
                 practicemode = 1;
             } else {
@@ -2407,7 +2432,7 @@ class xtGraphics extends Panel implements Runnable {
                 }
                 if (!holdit && fase != -6 && starcnt == 0) {
                     rd.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    arrow(madness[0].point, madness[0].missedcp, checkpoints, conto, arrace);
+                    arrow(madness[spectate].point, madness[spectate].missedcp, checkpoints, conto, arrace);
 
                     int num_cars = GameFacts.numberOfPlayers;
                     for (int array_one = 0; array_one < num_cars; array_one++) {
@@ -2535,7 +2560,7 @@ class xtGraphics extends Panel implements Runnable {
                     rd.drawImage(pwr, 470, 27, null);
                     rd.drawImage(lap, 19, 7, null);
                     rd.setColor(new Color(0, 0, 100));
-                    rd.drawString("" + (madness[0].nlaps + 1) + " / " + checkpoints.nlaps + "", 51, 18);
+                    rd.drawString("" + (madness[spectate].nlaps + 1) + " / " + checkpoints.nlaps + "", 51, 18);
                     rd.drawImage(was, 92, 7, null);
                     rd.setColor(new Color(0, 0, 100));
                     rd.drawString("" + checkpoints.wasted + " / " + (GameFacts.numberOfPlayers - 1), 150, 18);
@@ -2559,7 +2584,18 @@ class xtGraphics extends Panel implements Runnable {
                     rd.drawString("" + position + suffix + "", 110, 43);
                     rd.setFont(new Font("SansSerif", 1, 11));
                     FontHandler.fMetrics = rd.getFontMetrics();
-                    drawstat(madness[0].stat.maxmag, madness[0].hitmag, madness[0].newcar, madness[0].power);
+                    drawstat(madness[spectate].stat.maxmag, madness[spectate].hitmag, madness[spectate].newcar, madness[spectate].power);
+
+                    if (GameSparker.DEBUG) {
+                        if (debugmode) {
+                            rd.setColor(new Color(0, 0, 0));
+                            rd.drawString("pcleared: " + madness[spectate].pcleared, 20, 80);
+                            rd.drawString("checkpoints.clear[" + spectate + "]: " + checkpoints.clear[spectate], 20, 95);
+                            rd.drawString("X: " + conto[spectate].x, 20, 400);
+                            rd.drawString("Y: " + conto[spectate].y, 20, 420);
+                            rd.drawString("Z: " + conto[spectate].z, 20, 440);
+                        }
+                    }
                 }
             }
             if (!holdit) {
@@ -3086,7 +3122,6 @@ class xtGraphics extends Panel implements Runnable {
         }
         rd.drawImage(contin[pcontin], 290, 350 - pin, null);
         if (control.enter || control.handb) {
-            fase = 10;
             if (loadedt) {
                 strack.setPaused(true);
                 strack.unload();
@@ -3096,6 +3131,7 @@ class xtGraphics extends Panel implements Runnable {
                 unlocked++;
                 HLogger.info(unlocked);
             }
+            fase = -8000;
             flipo = 0;
             control.enter = false;
             control.handb = false;
@@ -4616,6 +4652,14 @@ class xtGraphics extends Panel implements Runnable {
         Medium.zy = 10;
         Medium.ground = 570;
         aconto[sc[0]].d(rd);
+
+        if (GameSparker.DEBUG) {
+            if (debugmode) {
+                rd.setColor(new Color(255, 255, 255));
+                rd.drawString("sc[" + sc[0]  + "]", 33, 50);
+            }
+        }
+
         if (flipo == 0) {
             rd.setFont(new Font("SansSerif", 1, 13));
             FontHandler.fMetrics = rd.getFontMetrics();

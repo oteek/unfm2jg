@@ -1015,17 +1015,17 @@ public class GameSparker extends Applet implements Runnable {
             if (xtgraphics.fase == -205) {
                 xtgraphics.fase = -5;
             }
+            if (xtgraphics.fase == -8000) {         // save the fucking game properly
+
+                if (checkpoints.stage == xtgraphics.unlocked && xtgraphics.winner && xtgraphics.unlocked != GameFacts.numberOfStages)
+                    savecookie("unlocked", "" + xtgraphics.unlocked);
+                savecookie("gameprfact", "" + (int) f);
+                savecookie("usercar", "" + xtgraphics.sc[0]);
+
+                xtgraphics.fase = 10;
+            }
             if (xtgraphics.fase == -5) {
                 xtgraphics.finish(checkpoints, aconto, u[0]);
-
-                if (xtgraphics.antiCookieSpam != 5) {
-                    if (checkpoints.stage == xtgraphics.unlocked && xtgraphics.winner && xtgraphics.unlocked != GameFacts.numberOfStages)
-                        savecookie("unlocked", "" + xtgraphics.unlocked);
-                    savecookie("gameprfact", "" + (int) f);
-                    savecookie("usercar", "" + xtgraphics.sc[0]);
-                    xtgraphics.antiCookieSpam++;
-                }
-
                 xtgraphics.ctachm(xm, ym, mouses, u[0]);
                 if (checkpoints.stage == GameFacts.numberOfStages && xtgraphics.winner)
                     catchlink(1);
@@ -1273,17 +1273,17 @@ public class GameSparker extends Applet implements Runnable {
                 }
                 if (xtgraphics.starcnt < 38) {
                     if (view == 0) {
-                        Medium.follow(aconto1[0], amadness[0].cxz, u[0].lookback);
-                        xtgraphics.stat(amadness, checkpoints, u[0], aconto1, true);
+                        Medium.follow(aconto1[xtgraphics.spectate], amadness[xtgraphics.spectate].cxz, u[xtgraphics.spectate].lookback);
+                        xtgraphics.stat(amadness, checkpoints, u[xtgraphics.spectate], aconto1, true);
                         initMoto(amadness, 2, 5);
                     }
                     if (view == 1) {
-                        Medium.around(aconto1[0], false);
-                        xtgraphics.stat(amadness, checkpoints, u[0], aconto1, false);
+                        Medium.around(aconto1[xtgraphics.spectate], false);
+                        xtgraphics.stat(amadness, checkpoints, u[xtgraphics.spectate], aconto1, false);
                     }
                     if (view == 2) {
-                        Medium.watch(aconto1[0], amadness[0].mxz);
-                        xtgraphics.stat(amadness, checkpoints, u[0], aconto1, false);
+                        Medium.watch(aconto1[xtgraphics.spectate], amadness[0].mxz);
+                        xtgraphics.stat(amadness, checkpoints, u[xtgraphics.spectate], aconto1, false);
                     }
                     if (mouses == 1) {
                         u[0].enter = true;
