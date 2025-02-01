@@ -1,9 +1,9 @@
 class CheckPoints {
 
-    public final int[] x = new int[140];
-    public final int[] z = new int[140];
-    public final int[] y = new int[140];
-    public final int[] typ = new int[140];
+    public final int[] x = new int[1400];
+    public final int[] z = new int[1400];
+    public final int[] y = new int[1400];
+    public final int[] typ = new int[1400];
     public int pcs = 0;
     public int nsp = 0;
     public int n = 0;
